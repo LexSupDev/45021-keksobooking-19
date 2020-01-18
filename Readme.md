@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей Суппес](https://up.htmlacademy.ru/javascript/19/user/45021).
-* Наставник: `Неизвестно`.
+* Наставник: `без наставника`.
 
 ---
 
