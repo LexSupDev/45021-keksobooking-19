@@ -116,5 +116,6 @@ for (var i = 0; i < ads.length; i++) {
 // создание карточек объявлений
 fragment2.appendChild(renderCard(ads[0]));
 
-map.insertBefore(fragment2, cardPlaceBefore); // вставка карточек объявлений на страницу
 similarListElement.appendChild(fragment); // вставка меток на страницу
+map.insertBefore(fragment2, cardPlaceBefore); // вставка карточек объявлений на страницу
+
