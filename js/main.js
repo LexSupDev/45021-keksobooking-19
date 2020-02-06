@@ -18,9 +18,7 @@ var similarPinTemplate = document.querySelector('#pin').content;
 
 var card = document.querySelector('#card');
 var cardTemplate = card.content.querySelector('.map__card');
-var cardPlaceBefore = document.querySelector('.map__filters-container');
-
-map.classList.remove('map--faded');
+// var cardPlaceBefore = document.querySelector('.map__filters-container');
 
 // генератор случайного числа с numCount цифрами после запятой
 var getRandom = function (min, max, numCount) {
@@ -116,6 +114,20 @@ for (var i = 0; i < ads.length; i++) {
 // создание карточек объявлений
 fragment2.appendChild(renderCard(ads[0]));
 
-similarListElement.appendChild(fragment); // вставка меток на страницу
-map.insertBefore(fragment2, cardPlaceBefore); // вставка карточек объявлений на страницу
+/* similarListElement.appendChild(fragment); // вставка меток на страницу
+map.insertBefore(fragment2, cardPlaceBefore); // вставка карточек объявлений на страницу */
+
+var mapPinMain = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var mapfilters = document.querySelector('.map__filters');
+
+var active = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  mapfilters.classList.remove('map-filters--disabled');
+};
+
+mapPinMain.addEventListener('mousedown', function () {
+  active();
+});
 
