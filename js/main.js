@@ -167,11 +167,9 @@ var checkQuantityRoomstoGuests = function () {
   }
 };
 
-
 mapPinMain.addEventListener('mousedown', function (e) {
   if (e.button === 0) {
     active();
-    checkQuantityRoomstoGuests();
   }
 });
 
@@ -179,5 +177,13 @@ mapPinMain.addEventListener('keydown', function (e) {
   if (e.keyCode === 13) {
     active();
   }
+});
+
+roomsNumber.addEventListener('change', function () {
+  checkQuantityRoomstoGuests();
+});
+
+capacity.addEventListener('change', function () {
+  checkQuantityRoomstoGuests();
 });
 
