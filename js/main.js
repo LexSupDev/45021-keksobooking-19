@@ -4,6 +4,7 @@ var AD_NUM = 8; // количество объявлений
 var PIN_WIDTH = 50; // ширина метки
 var PIN_HEIGHT = 70; // высота метки
 var ads = []; // массив с объявлениями
+var pinTailHeight = 17;
 
 // массивы с данными
 var AD_TYPE = {'palace': {ru: 'Дворец'}, 'flat': {ru: 'Квартира'}, 'house': {ru: 'Дом'}, 'bungalo': {ru: 'Бунгало'}};
@@ -13,14 +14,12 @@ var AD_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'condi
 
 var map = document.querySelector('.map');
 var mapWidth = map.offsetWidth - 1; // ширина блока с картой для установки пинов
-var similarListElement = map.querySelector('.map__pins');
+// var similarListElement = map.querySelector('.map__pins');
 var similarPinTemplate = document.querySelector('#pin').content;
 
 var card = document.querySelector('#card');
 var cardTemplate = card.content.querySelector('.map__card');
-var cardPlaceBefore = document.querySelector('.map__filters-container');
-
-map.classList.remove('map--faded');
+// var cardPlaceBefore = document.querySelector('.map__filters-container');
 
 // генератор случайного числа с numCount цифрами после запятой
 var getRandom = function (min, max, numCount) {
@@ -116,6 +115,75 @@ for (var i = 0; i < ads.length; i++) {
 // создание карточек объявлений
 fragment2.appendChild(renderCard(ads[0]));
 
-similarListElement.appendChild(fragment); // вставка меток на страницу
-map.insertBefore(fragment2, cardPlaceBefore); // вставка карточек объявлений на страницу
+/* similarListElement.appendChild(fragment); // вставка меток на страницу
+map.insertBefore(fragment2, cardPlaceBefore); // вставка карточек объявлений на страницу */
+
+var mapPinMain = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var mapFilters = document.querySelectorAll('.map__filter');
+var adFormField = adForm.querySelectorAll('input, select');
+
+for (i = 0; i < mapFilters.length; i++) {
+  mapFilters[i].setAttribute('disabled', 'disabled');
+}
+
+for (i = 0; i < adFormField.length; i++) {
+  adFormField[i].setAttribute('disabled', 'disabled');
+}
+
+
+var active = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  for (i = 0; i < mapFilters.length; i++) {
+    mapFilters[i].removeAttribute('disabled', 'disabled');
+  }
+
+  for (i = 0; i < adFormField.length; i++) {
+    adFormField[i].removeAttribute('disabled');
+  }
+};
+
+var fillPinAddress = function (pin) {
+  var addressField = adForm.querySelector('#address');
+  addressField.value = Math.round(pin.offsetLeft + pin.offsetWidth / 2);
+  addressField.value += ', ' + Math.round(pin.offsetTop + pin.offsetHeight + pinTailHeight);
+};
+
+fillPinAddress(mapPinMain);
+
+var roomsNumber = adForm.querySelector('#room_number');
+var capacity = adForm.querySelector('#capacity');
+
+var checkQuantityRoomstoGuests = function () {
+  var rooms = Number(roomsNumber.value);
+  var guests = Number(capacity.value);
+  if (rooms < guests) {
+    capacity.setCustomValidity('Количество гостей не может превышать количество комнат!');
+  } else if (rooms === 100 && guests !== 0) {
+    capacity.setCustomValidity('Такое количество комнат не предназначено для размещения гостей. Укажите значение "не для гостей"');
+  } else {
+    capacity.setCustomValidity('');
+  }
+};
+
+mapPinMain.addEventListener('mousedown', function (e) {
+  if (e.button === 0) {
+    active();
+  }
+});
+
+mapPinMain.addEventListener('keydown', function (e) {
+  if (e.keyCode === 13) {
+    active();
+  }
+});
+
+roomsNumber.addEventListener('change', function () {
+  checkQuantityRoomstoGuests();
+});
+
+capacity.addEventListener('change', function () {
+  checkQuantityRoomstoGuests();
+});
 
