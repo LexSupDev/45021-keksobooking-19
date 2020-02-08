@@ -14,12 +14,12 @@ var AD_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'condi
 
 var map = document.querySelector('.map');
 var mapWidth = map.offsetWidth - 1; // ширина блока с картой для установки пинов
-// var similarListElement = map.querySelector('.map__pins');
+var similarListElement = map.querySelector('.map__pins');
 var similarPinTemplate = document.querySelector('#pin').content;
 
 var card = document.querySelector('#card');
 var cardTemplate = card.content.querySelector('.map__card');
-// var cardPlaceBefore = document.querySelector('.map__filters-container');
+var cardPlaceBefore = document.querySelector('.map__filters-container');
 
 // генератор случайного числа с numCount цифрами после запятой
 var getRandom = function (min, max, numCount) {
@@ -77,6 +77,7 @@ var renderPin = function (adsarr) {
 // рендер карточек объявлений
 var renderCard = function (adsarr) {
   var cardElement = cardTemplate.cloneNode(true);
+  console.log(adsarr);
   cardElement.querySelector('.popup__title').textContent = adsarr.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = adsarr.offer.address;
   cardElement.querySelector('.popup__text--price').textContent = adsarr.offer.price + '₽/ночь.';
@@ -106,7 +107,7 @@ var renderCard = function (adsarr) {
 
 var fragment = document.createDocumentFragment();
 var fragment2 = document.createDocumentFragment();
-ads = getAds();
+ads  = getAds();
 
 // создание объявлений (с меткой)
 for (var i = 0; i < ads.length; i++) {
@@ -114,9 +115,6 @@ for (var i = 0; i < ads.length; i++) {
 }
 // создание карточек объявлений
 fragment2.appendChild(renderCard(ads[0]));
-
-/* similarListElement.appendChild(fragment); // вставка меток на страницу
-map.insertBefore(fragment2, cardPlaceBefore); // вставка карточек объявлений на страницу */
 
 var mapPinMain = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
@@ -130,7 +128,25 @@ for (i = 0; i < mapFilters.length; i++) {
 for (i = 0; i < adFormField.length; i++) {
   adFormField[i].setAttribute('disabled', 'disabled');
 }
+console.log(ads);
+var getCard = function () {
+  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  // console.log(mapPins);
 
+  var onShowCard = function (index) {
+    var activeCard = map.querySelector('.map__card');
+    if (activeCard) {
+      activeCard.remove();
+    }
+    renderCard(ads, index);
+  };
+  mapPins.forEach(function (item, index) {
+    console.log(index);
+    item.addEventListener('click', function () {
+      onShowCard(index);
+    });
+  });
+};
 
 var active = function () {
   map.classList.remove('map--faded');
@@ -142,6 +158,24 @@ var active = function () {
   for (i = 0; i < adFormField.length; i++) {
     adFormField[i].removeAttribute('disabled');
   }
+
+  similarListElement.appendChild(fragment); // вставка меток на страницу
+  map.insertBefore(fragment2, cardPlaceBefore); // вставка карточек объявлений на страницу */
+
+  var cardPopup = document.querySelector('.map__card');
+  var cardClosePopup = cardPopup.querySelector('.popup__close');
+
+  cardClosePopup.addEventListener('click', function () {
+    cardPopup.classList.add('hidden');
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.keyCode === 27) {
+      cardPopup.classList.add('hidden');
+    }
+  });
+
+  getCard();
 };
 
 var fillPinAddress = function (pin) {
@@ -186,4 +220,3 @@ roomsNumber.addEventListener('change', function () {
 capacity.addEventListener('change', function () {
   checkQuantityRoomstoGuests();
 });
-
