@@ -58,7 +58,6 @@ var getAds = function () {
       type: AD_TYPES_NAME[getRandom(0, AD_TYPES_NAME.length, 0)], rooms: rooms, guests: 2 * rooms, checkin: AD_CHECK[getRandom(0, AD_CHECK.length, 0)], checkout: AD_CHECK[getRandom(0, AD_CHECK.length, 0)],
       features: getShuffleFeatures(AD_FEATURES).slice(0, getRandom(1, AD_FEATURES.length, 0)), description: 'Тут будет описание.', photos: photos}, location: {x: getRandom(1, mapWidth, 0), y: getRandom(130, 630, 0)}});
   }
-  // console.log(JSON.stringify(ads, 0, ' '));
   return ads;
 };
 
@@ -77,7 +76,6 @@ var renderPin = function (adsarr) {
 // рендер карточек объявлений
 var renderCard = function (adsarr) {
   var cardElement = cardTemplate.cloneNode(true);
-  console.log(adsarr);
   cardElement.querySelector('.popup__title').textContent = adsarr.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = adsarr.offer.address;
   cardElement.querySelector('.popup__text--price').textContent = adsarr.offer.price + '₽/ночь.';
@@ -107,46 +105,20 @@ var renderCard = function (adsarr) {
 
 var fragment = document.createDocumentFragment();
 var fragment2 = document.createDocumentFragment();
-ads  = getAds();
-
-// создание объявлений (с меткой)
-for (var i = 0; i < ads.length; i++) {
-  fragment.appendChild(renderPin(ads[i]));
-}
-// создание карточек объявлений
-fragment2.appendChild(renderCard(ads[0]));
+ads = getAds();
 
 var mapPinMain = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var mapFilters = document.querySelectorAll('.map__filter');
 var adFormField = adForm.querySelectorAll('input, select');
 
-for (i = 0; i < mapFilters.length; i++) {
+for (var i = 0; i < mapFilters.length; i++) {
   mapFilters[i].setAttribute('disabled', 'disabled');
 }
 
 for (i = 0; i < adFormField.length; i++) {
   adFormField[i].setAttribute('disabled', 'disabled');
 }
-console.log(ads);
-var getCard = function () {
-  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-  // console.log(mapPins);
-
-  var onShowCard = function (index) {
-    var activeCard = map.querySelector('.map__card');
-    if (activeCard) {
-      activeCard.remove();
-    }
-    renderCard(ads, index);
-  };
-  mapPins.forEach(function (item, index) {
-    console.log(index);
-    item.addEventListener('click', function () {
-      onShowCard(index);
-    });
-  });
-};
 
 var active = function () {
   map.classList.remove('map--faded');
@@ -159,23 +131,26 @@ var active = function () {
     adFormField[i].removeAttribute('disabled');
   }
 
+  // создание объявлений (с меткой)
+  for (i = 0; i < ads.length; i++) {
+    fragment.appendChild(renderPin(ads[i]));
+  }
+  // создание карточек объявлений
+  fragment2.appendChild(renderCard(ads[0]));
+
   similarListElement.appendChild(fragment); // вставка меток на страницу
   map.insertBefore(fragment2, cardPlaceBefore); // вставка карточек объявлений на страницу */
 
-  var cardPopup = document.querySelector('.map__card');
-  var cardClosePopup = cardPopup.querySelector('.popup__close');
-
-  cardClosePopup.addEventListener('click', function () {
-    cardPopup.classList.add('hidden');
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.keyCode === 27) {
-      cardPopup.classList.add('hidden');
+  var mapPins = document.querySelector('.map__pins');
+  mapPins.addEventListener('click', function (event) {
+    var target = event.target;
+    var button = event.target.closest('.map__pin');
+    if (mapPins.contains(button)) {
+      console.log(target);
+      renderCard(ads[2]);
     }
+    
   });
-
-  getCard();
 };
 
 var fillPinAddress = function (pin) {
@@ -219,4 +194,17 @@ roomsNumber.addEventListener('change', function () {
 
 capacity.addEventListener('change', function () {
   checkQuantityRoomstoGuests();
+});
+
+var cardPopup = document.querySelector('.map__card');
+// var cardClosePopup = cardPopup.querySelector('.popup__close');
+
+/* cardClosePopup.addEventListener('click', function () {
+  cardPopup.classList.add('hidden');
+});*/
+
+document.addEventListener('keydown', function (e) {
+  if (e.keyCode === 27) {
+    cardPopup.remove();
+  }
 });
