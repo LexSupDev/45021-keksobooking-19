@@ -3,8 +3,11 @@
 var OFFERS_NUM = 8;
 var pin = {width: 50, height: 70, tailHeight: 17};
 var offers = {};
+var 
+var map = document.querySelector('.map');
+var mapWidth = map.offsetWidth - 1; // ширина блока с картой для установки пинов
 
-//массивы с данными
+// массивы с данными
 var OFFER_TYPE = {'palace': {ru: 'Дворец'}, 'flat': {ru: 'Квартира'}, 'house': {ru: 'Дом'}, 'bungalo': {ru: 'Бунгало'}};
 var OFFER_TYPES_NAME = ['palace', 'flat', 'house', 'bungalo'];
 var OFFER_CHECK = ['12:00', '13:00', '14:00'];
@@ -34,4 +37,31 @@ var getPhotos = function () {
     photosArr.push('http://o0.github.io/assets/images/tokyo/hotel' + (i + 1) + '.jpg');
   }
   return photosArr;
+};
+
+var getOffers = function () {
+  for (var i = 0; i < OFFERS_NUM; i++) {
+    var rooms = getRandom(1, 5, 0);
+    var photos = getPhotos();
+    offers.push({
+      author: {
+        avatar: 'img/avatars/user0' + (i + 1) + '.png'
+      },
+      offer: {
+        title: 'Мой дом' + (i + 1),
+        address: '600, 350', price: getRandom(2000, 10000, 0),
+        type: OFFER_TYPES_NAME[getRandom(0, OFFER_TYPES_NAME.length, 0)],
+        rooms: rooms, guests: 2 * rooms,
+        checkin: OFFER_CHECK[getRandom(0, OFFER_CHECK.length, 0)],
+        checkout: OFFER_CHECK[getRandom(0, OFFER_CHECK.length, 0)],
+        features: getShuffleFeatures(OFFER_FEATURES).slice(0, getRandom(1, OFFER_FEATURES.length, 0)),
+        description: 'Тут будет описание.',
+        photos: photos
+      },
+      location: {
+        x: getRandom(1, mapWidth, 0),
+        y: getRandom(130, 630, 0)
+      }
+    });
+  }
 };
