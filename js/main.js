@@ -74,7 +74,11 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 var createPins = function () {
   var fillPinInfo = function (offer) {
     var pinElem = pinTemplate.cloneNode(true);
+    
+    pinElem.style.left = offer.location.x - (pin.width / 2) + 'px';
+    pinElem.style.top = offer.location.y - (pin.height) + 'px';
     pinElem.querySelector('img').src = offer.author.avatar;
+    pinElem.querySelector('img').alt = offer.offer.title;
     return pinElem;
   };
 
