@@ -2,8 +2,7 @@
 
 var OFFERS_NUM = 8;
 var pin = {width: 50, height: 70, tailHeight: 17};
-var offers = {};
-var 
+var offers = [];
 var map = document.querySelector('.map');
 var mapWidth = map.offsetWidth - 1; // ширина блока с картой для установки пинов
 
@@ -64,4 +63,27 @@ var getOffers = function () {
       }
     });
   }
+  return offers;
 };
+
+offers = getOffers(); // заполнение массива случайными данными
+
+var mapPins = document.querySelector('.map__pins');
+var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
+var createPins = function () {
+  var fillPinInfo = function (offer) {
+    var pinElem = pinTemplate.cloneNode(true);
+    pinElem.querySelector('img').src = offer.author.avatar;
+    return pinElem;
+  };
+
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < offers.length; i++) {
+    fragment.appendChild(fillPinInfo(offers[i]));
+  }
+  mapPins.appendChild(fragment);
+};
+
+createPins();
