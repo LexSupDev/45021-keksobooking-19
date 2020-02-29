@@ -247,7 +247,9 @@ var validation = function () {
     checkQuantityRoomstoGuests();
   });
 
-  
+  var adFormTypes = document.querySelector('#type');
+  var adFormPrice = document.querySelector('#price');
+  console.log(adFormTypes);
 };
 
 disablePage();
