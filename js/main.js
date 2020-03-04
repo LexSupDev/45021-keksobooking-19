@@ -238,6 +238,8 @@ var checkQuantityRoomstoGuests = function () {
   }
 };
 
+
+
 var validation = function () {
   roomsNumber.addEventListener('change', function () {
     checkQuantityRoomstoGuests();
@@ -249,7 +251,16 @@ var validation = function () {
 
   var adFormTypes = document.querySelector('#type');
   var adFormPrice = document.querySelector('#price');
-  console.log(adFormTypes);
+  var minPrice;
+  
+  switch (adFormTypes) {
+    case 'flat': minPrice = 1000;
+    case 'bungalo': minPrice = 0;
+    case 'house': minPrice = 5000;
+    case 'palace': minPrice = 10000;
+  }
+  
+  adFormPrice['placeholder'] = minPrice;
 };
 
 disablePage();
