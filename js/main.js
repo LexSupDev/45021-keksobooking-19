@@ -18,6 +18,8 @@ var adFormField = adForm.querySelectorAll('input, select');
 var mapPinMain = document.querySelector('.map__pin--main');
 var roomsNumber = adForm.querySelector('#room_number');
 var capacity = adForm.querySelector('#capacity');
+var adFormTypes = document.querySelector('#type');
+var adFormPrice = document.querySelector('#price');
 
 // генератор случайного числа с numCount цифрами после запятой
 var getRandom = function (min, max, numCount) {
@@ -238,7 +240,40 @@ var checkQuantityRoomstoGuests = function () {
   }
 };
 
+var minPriceForOffer = function () {
+  var minPrice;
 
+  switch (adFormTypes.value) {
+    case 'flat':
+      minPrice = 1000;
+      break;
+    case 'bungalo':
+      minPrice = 0;
+      break;
+    case 'house':
+      minPrice = 5000;
+      break;
+    case 'palace':
+      minPrice = 10000;
+      break;
+  }
+  adFormPrice.min = minPrice;
+  adFormPrice['placeholder'] = minPrice;
+};
+
+var timeInOutChange = function (evt) {
+  var adFormTimeIn = document.querySelector('#timein');
+  var adFormTimeOut = document.querySelector('#timeout');
+  console.log(evt.target.value);
+  if (adFormTimeIn.value !== adFormTimeOut.value) {
+    if (evt.target === adFormTimeIn) {
+      adFormTimeOut.value = evt.target.value;
+      console.log('2= ' + evt.target);
+    } else {
+      adFormTimeIn.value = evt.target.value;
+    }
+  }
+};
 
 var validation = function () {
   roomsNumber.addEventListener('change', function () {
@@ -249,25 +284,22 @@ var validation = function () {
     checkQuantityRoomstoGuests();
   });
 
-  var adFormTypes = document.querySelector('#type');
-  var adFormPrice = document.querySelector('#price');
-  var minPrice;
-  
-  switch (adFormTypes) {
-    case 'flat': minPrice = 1000;
-    case 'bungalo': minPrice = 0;
-    case 'house': minPrice = 5000;
-    case 'palace': minPrice = 10000;
-  }
-  
-  adFormPrice['placeholder'] = minPrice;
+  adFormTypes.addEventListener('change', function () {
+    minPriceForOffer();
+  });
+
+  var adFormTimeField = document.querySelector('.ad-form__element--time');
+  adFormTimeField.addEventListener('change', function (evt) {
+    timeInOutChange(evt);    
+  });
+
 };
 
 disablePage();
 
 function activePage() {
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
+  map.classList.remove('map--faded'); // todo переписать в функцию
+  adForm.classList.remove('ad-form--disabled');  // todo переписать в функцию
   enableFormActions();
   validation();
   ads = getOffers(); // заполнение массива случайными данными
