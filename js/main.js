@@ -94,7 +94,7 @@ var addPinClickHandler = function (mapPin, ad) {
   };
 
   var popupEscPress = function (evt) {
-    if(evt.key === 'Escape') {
+    if (evt.key === 'Escape') {
       closeCard();
     }
   };
@@ -264,11 +264,9 @@ var minPriceForOffer = function () {
 var timeInOutChange = function (evt) {
   var adFormTimeIn = document.querySelector('#timein');
   var adFormTimeOut = document.querySelector('#timeout');
-  console.log(evt.target.value);
   if (adFormTimeIn.value !== adFormTimeOut.value) {
     if (evt.target === adFormTimeIn) {
       adFormTimeOut.value = evt.target.value;
-      console.log('2= ' + evt.target);
     } else {
       adFormTimeIn.value = evt.target.value;
     }
@@ -290,7 +288,7 @@ var validation = function () {
 
   var adFormTimeField = document.querySelector('.ad-form__element--time');
   adFormTimeField.addEventListener('change', function (evt) {
-    timeInOutChange(evt);    
+    timeInOutChange(evt);
   });
 
 };
@@ -299,7 +297,7 @@ disablePage();
 
 function activePage() {
   map.classList.remove('map--faded'); // todo переписать в функцию
-  adForm.classList.remove('ad-form--disabled');  // todo переписать в функцию
+  adForm.classList.remove('ad-form--disabled'); // todo переписать в функцию
   enableFormActions();
   validation();
   ads = getOffers(); // заполнение массива случайными данными
